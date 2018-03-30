@@ -13,6 +13,21 @@ skip_before_action :verify_authenticity_token
   	member.wp_id = params[:id]
   	member.promo_code = ('a'..'z').to_a.shuffle[0,10].join
   	member.save
+
+  	if !params["ref_me"].blank?
+  		ref = Referral.new
+	  	ref["owner_wp_id"] = params["ref_me"]
+	  	ref["referred_wp_id"] = params[:id]
+	  	numero = SecureRandom.random_number(10000)
+	  	ref["category"] = 0
+	  	if numero == 9999
+	  		ref["category"] = 2
+	  	elsif numero >= 9000
+	  		ref["category"] = 1
+	  	end
+	  	ref.save
+  	end
+
   	render plain: "OK"
   end
 end
