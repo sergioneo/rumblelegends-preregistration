@@ -11,6 +11,7 @@ skip_before_action :verify_authenticity_token
   	end
   	member = Member.new
   	member.wp_id = params[:id]
+    member.username = params[:username]
   	member.promo_code = ('a'..'z').to_a.shuffle[0,10].join
   	member.save
 
