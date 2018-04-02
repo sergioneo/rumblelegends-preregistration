@@ -24,6 +24,7 @@ skip_before_action :verify_authenticity_token
 	  	ref["owner_wp_id"] = params["ref_me"]
 	  	ref["referred_wp_id"] = params[:id]
 	  	numero = SecureRandom.random_number(10000)
+      ref["viewed"] = 0
 	  	ref["category"] = 0
 	  	if numero == 9999
 	  		ref["category"] = 2
