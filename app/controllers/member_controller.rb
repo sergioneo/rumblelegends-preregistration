@@ -9,6 +9,10 @@ skip_before_action :verify_authenticity_token
   		render plain: "USER EXISTS"
   		return
   	end
+    if params[:id] != Digest::SHA1.hexdigest(params[:username]+"subscriber")
+      render plain: "INVALID ID"
+      return
+    end
   	member = Member.new
   	member.wp_id = params[:id]
     member.username = params[:username]
