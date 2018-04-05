@@ -1,4 +1,5 @@
 class ReferralController < ApplicationController
+  skip_before_action :verify_authenticity_token
   def index
   	return_package = Hash.new
   	viewed_referrals = Referral.where(owner_wp_id: params[:id], viewed: 1)
@@ -12,14 +13,18 @@ class ReferralController < ApplicationController
   	return_package["promo_code"] = member.promo_code
 
     return_package["member_rank"] = Member.all.to_a.map { |m| {"username": m.username, "refs": Referral.where(owner_wp_id: m.wp_id).count}}.sort_by { |k| k[:refs] }.reverse.take(5)
-    return_package["invited_friends"] = Referral.where(owner_wp_id: params[:id]).to_a.map { |r| {"username": Member.where(wp_id: r.referred_wp_id).first.username, "date": r.created_at.strftime("%d/%m/%Y")}}
+    return_package["invited_friends"] = Array.new#Referral.where(owner_wp_id: params[:id]).to_a.map { |r| {"username": Member.where(wp_id: r.referred_wp_id).first.username, "date": r.created_at.strftime("%d/%m/%Y")}}
 
   	render json: return_package
   end
 
   def view
-    ref = Referral.find(params[:id])
-    ref.view = 1;
+    if  Referral.where(owner_wp_id: params[:id], viewed: 0).count == 0
+      render plain: "NO TICKETS"
+      return
+    end
+    ref = Referral.where(owner_wp_id: params[:id], viewed: 0).first
+    ref.viewed = 1
     ref.save
     render plain: ref.category
   end
