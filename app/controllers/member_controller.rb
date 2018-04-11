@@ -26,9 +26,9 @@ skip_before_action :verify_authenticity_token
 	  	numero = SecureRandom.random_number(10000)
       ref["viewed"] = 0
 	  	ref["category"] = 0
-	  	if numero == 9999
+	  	if numero == 0
 	  		ref["category"] = 2
-	  	elsif numero >= 9000
+	  	elsif numero <= 34
 	  		ref["category"] = 1
 	  	end
 	  	ref.save
