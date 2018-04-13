@@ -44,21 +44,21 @@ skip_before_action :verify_authenticity_token
 	  		ref["category"] = 1
 	  	end
 	  	ref.save
-  	end
 
-    if Referral.where(owner_wp_id: params["ref_me"]).count == 10
-      ft = FreeTicket.new
-      ft.viewed = 1
-      ft.owner_wp_id = params["ref_me"]
-      ft.category = 1
-      ft.save
-    elsif Referral.where(owner_wp_id: params["ref_me"]).count == 100
-      ft = FreeTicket.new
-      ft.viewed = 1
-      ft.owner_wp_id = params["ref_me"]
-      ft.category = 2
-      ft.save
-    end
+      if Referral.where(owner_wp_id: params["ref_me"]).count == 10
+        ft = FreeTicket.new
+        ft.viewed = 1
+        ft.owner_wp_id = params["ref_me"]
+        ft.category = 1
+        ft.save
+      elsif Referral.where(owner_wp_id: params["ref_me"]).count == 100
+        ft = FreeTicket.new
+        ft.viewed = 1
+        ft.owner_wp_id = params["ref_me"]
+        ft.category = 2
+        ft.save
+      end
+  	end
 
   	render plain: "OK"
   end
