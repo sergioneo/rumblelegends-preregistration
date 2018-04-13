@@ -15,7 +15,7 @@ class LinkController < ApplicationController
 
   def post
 
-  	existing = Link.where(original_url: "http://www.rumblelegends.com/register?ref_by="+params["id"])
+  	existing = Link.where(original_url: "https://www.rumblelegends.com/register?ref_by="+params["id"])
 
   	if existing.count == 1
   		render plain: request.base_url+"/l/"+existing.first.code
