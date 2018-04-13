@@ -19,6 +19,18 @@ skip_before_action :verify_authenticity_token
   	member.promo_code = ('a'..'z').to_a.shuffle[0,10].join
   	member.save
 
+    ft = FreeTicket.new
+    ft.owner_wp_id = params[:id]
+    numero = SecureRandom.random_number(1000)
+    ft.viewed = 0
+    ft.category = 0
+    if numero == 0
+      ft.category = 2
+    elsif numero <= 34
+      ft.category = 1
+    end
+    ft.save
+
   	if !params["ref_me"].blank?
   		ref = Referral.new
 	  	ref["owner_wp_id"] = params["ref_me"]
@@ -33,6 +45,20 @@ skip_before_action :verify_authenticity_token
 	  	end
 	  	ref.save
   	end
+
+    if Referral.where(owner_wp_id: params["ref_me"]).count == 10
+      ft = FreeTicket.new
+      ft.viewed = 1
+      ft.owner_wp_id = params["ref_me"]
+      ft.category = 1
+      ft.save
+    elsif Referral.where(owner_wp_id: params["ref_me"]).count == 100
+      ft = FreeTicket.new
+      ft.viewed = 1
+      ft.owner_wp_id = params["ref_me"]
+      ft.category = 2
+      ft.save
+    end
 
   	render plain: "OK"
   end

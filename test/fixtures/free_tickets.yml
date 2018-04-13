@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  owner_wp_id: MyString
+  viewed: false
+  category: 1
+
+two:
+  owner_wp_id: MyString
+  viewed: false
+  category: 1

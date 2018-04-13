@@ -1,0 +1,2 @@
+class FreeTicket < ApplicationRecord
+end
