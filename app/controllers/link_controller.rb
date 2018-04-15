@@ -21,7 +21,7 @@ class LinkController < ApplicationController
   		render plain: request.base_url+"/l/"+existing.first.code
   	else
 	  	l = Link.new
-	  	l["original_url"] = "http://www.rumblelegends.com/register?ref_by="+params["id"]
+	  	l["original_url"] = "https://www.rumblelegends.com/register?ref_by="+params["id"]
 	  	l["hits"] = 0
 	  	l["code"] = ('a'..'z').to_a.shuffle[0,12].join
 	  	l.save
