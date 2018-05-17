@@ -44,6 +44,18 @@ skip_before_action :verify_authenticity_token
 	  		ref["category"] = 1
 	  	end
 	  	ref.save
+		ft = FreeTicket.new
+		ft.viewed = 0
+		ft.owner_wp_id = params["ref_me"]
+		numero_n = SecureRandom.random_number(1000)
+		ft.viewed = 0
+		ft.category = 0
+		if numero_n == 0
+		    ft.category = 2
+		elsif numero_n <= 34
+		    ft.category = 1
+		end
+		ft.save
 
       if Referral.where(owner_wp_id: params["ref_me"]).count == 10
         ft = FreeTicket.new
