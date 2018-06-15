@@ -15,8 +15,31 @@ class ReferralController < ApplicationController
     return_package["tickets"].concat(free_tickets.map {|r| {"id": r.id}})
   	return_package["promo_code"] = member.promo_code
 
-    return_package["member_rank"] = Member.all.to_a.map { |m| {"username": m.username, "refs": Referral.where(owner_wp_id: m.wp_id).count}}.sort_by { |k| k[:refs] }.reverse.take(5)
-    return_package["invited_friends"] = Referral.where(owner_wp_id: params[:id]).to_a.map { |r| {"username": Member.where(wp_id: r.referred_wp_id).first.username, "date": r.created_at.strftime("%d/%m/%Y")}}
+    ranks = RefCount.order(:amount).reverse.take(5)
+    return_package["member_rank"] = Array.new
+    ranks.each do |r|
+      m = Member.where(wp_id: r.wp_id).first
+      nh = Hash.new
+      nh["username"] = m.username
+      nh["refs"] = r.amount
+      return_package["member_rank"].push(nh)
+    end
+
+    invited = Referral.where(owner_wp_id: params[:id])
+    return_package["invited_friends"] = Array.new
+    invited.each do |r|
+      i = Hash.new
+      inv = Member.where(wp_id: r.referred_wp_id).first
+      if !inv.blank?
+        i["username"] = inv.username
+        i["date"] = r.created_at.strftime("%d/%m/%Y")
+        return_package["invited_friends"].push(i)
+      end
+    end
+
+
+    #return_package["member_rank"] = Member.all.to_a.map { |m| {"username": m.username, "refs": Referral.where(owner_wp_id: m.wp_id).count}}.sort_by { |k| k[:refs] }.reverse.take(5)
+    #return_package["invited_friends"] = Referral.where(owner_wp_id: params[:id]).to_a.map { |r| {"username": Member.where(wp_id: r.referred_wp_id).first.username, "date": r.created_at.strftime("%d/%m/%Y")}}
     return_package["extra_prizes"] = prizes.map{|p| {"id": p.id, "type": p.category}}
 
   	render json: return_package

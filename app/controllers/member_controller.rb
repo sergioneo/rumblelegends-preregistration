@@ -45,6 +45,18 @@ skip_before_action :verify_authenticity_token
 	  	end
 	  	ref.save
 
+      rcount = RefCount.where(wp_id: params["ref_me"])
+      if rcount.length == 0
+        rc = RefCount.new
+        rc.wp_id = params["ref_me"]
+        rc.amount = 1
+        rc.save
+      else
+        rc = rcount.first
+        rc.amount = rc.amount + 1
+        rc.save
+      end
+
       if Referral.where(owner_wp_id: params["ref_me"]).count == 10
         ft = FreeTicket.new
         ft.viewed = 1

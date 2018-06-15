@@ -1,0 +1,2 @@
+class RefCount < ApplicationRecord
+end
